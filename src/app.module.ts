@@ -6,6 +6,7 @@ import { User } from './entities/User.entity';
 import { AuthModule } from './auth/auth.module';
 import { PendingUser } from './entities/PendingUser.entity';
 import { PasswordReset } from './entities/RenewPassword.entity';
+import { ThrottlerModule } from "@nestjs/throttler"
 
 
 @Module({
@@ -16,6 +17,11 @@ import { PasswordReset } from './entities/RenewPassword.entity';
       synchronize: true,
       entities: [User, PasswordReset, PendingUser]
     }),
+    ThrottlerModule.forRoot([{
+      name: "default",
+      ttl: 60_000,
+      limit: 3,
+    }]),
     AuthModule,
   ],
   controllers: [AppController],
